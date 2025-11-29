@@ -1,0 +1,39 @@
+@model bool
+
+@{
+    ViewData["Title"] = "Confirmación de eliminacion";
+}
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoIndex">Busqueda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDetail">Catalogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoCreate">Crear</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoEdit">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDelete">Eliminar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<h1>@ViewData["Title"]</h1>
+
+@if(Model==true)
+{
+<p>Presupuesto eliminado exitosamente</p>
+}
+else
+{
+<p>El presupuesto no pudo ser eliminado.</p>
+}

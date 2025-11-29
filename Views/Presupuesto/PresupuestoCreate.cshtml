@@ -1,0 +1,55 @@
+@model bool?
+
+
+@{
+    ViewData["Title"] = "Crear";
+}
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoIndex">Busqueda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDetail">Catalogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoCreate">Crear</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoEdit">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDelete">Eliminar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="text-center">
+    <h1 class="display-4">SeccionProductos</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@if(Model==true)
+{
+<p>Presupuesto cargado con éxito</p>
+}
+else if(Model==false)
+{
+<p>No se cargo nada parece. es todo un tema</p>
+}
+else
+{
+    <h2>Crear Presupuesto</h2>
+
+<form asp-action="PresupuestoCreate" method="post">
+    <label>Nombre del destinatario:</label>
+    <input type="text" name="nombre" class="form-control" />
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+}
+
+</div>

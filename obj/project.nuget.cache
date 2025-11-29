@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "dgSpecHash": "RhJhGTqB9RM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\gasto\\OneDrive\\Desktop\\facultad\\taller 2\\tps\\tl2-tp8-2025-GastonValla\\tl2-tp8-2025-GastonValla.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\gasto\\.nuget\\packages\\microsoft.data.sqlite\\10.0.0\\microsoft.data.sqlite.10.0.0.nupkg.sha512",
+    "C:\\Users\\gasto\\.nuget\\packages\\microsoft.data.sqlite.core\\10.0.0\\microsoft.data.sqlite.core.10.0.0.nupkg.sha512",
+    "C:\\Users\\gasto\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.11\\sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\gasto\\.nuget\\packages\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
+    "C:\\Users\\gasto\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\gasto\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.11\\sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\gasto\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error al obtener los datos de vulnerabilidad del paquete: No se puede cargar el índice de servicio del origen https://api.nuget.org/v3/index.json.",
+      "projectPath": "C:\\Users\\gasto\\OneDrive\\Desktop\\facultad\\taller 2\\tps\\tl2-tp8-2025-GastonValla\\tl2-tp8-2025-GastonValla.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\gasto\\OneDrive\\Desktop\\facultad\\taller 2\\tps\\tl2-tp8-2025-GastonValla\\tl2-tp8-2025-GastonValla.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

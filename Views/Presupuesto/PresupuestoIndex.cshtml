@@ -1,0 +1,51 @@
+﻿@model Presupuesto
+
+
+@{
+    ViewData["Title"] = "Busqueda Presupuestos";
+}
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoIndex">Busqueda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDetail">Catalogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoCreate">Crear</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoEdit">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDelete">Eliminar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="text-center">
+    <h1 class="display-4">Buscar presupuestos registrados</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@if(Model == null)
+{
+    <form method="post" asp-action="PresupuestoIndex">
+    <label class="mb-1">Ingrese un ID para buscar un presupuesto:</label>
+    <input type="number" name="idPres" class="form-control m-1" />
+    <button type="submit" class="btn btn-primary p-1 mt-1">Buscar</button>
+    </form>
+}
+else
+{
+    <p>@Model.IdPresupuesto</p>  
+    <p>@Model.NombreDestinatario</p> 
+    <p>@Model.FechaCreacion</p>   
+}
+
+
+</div>

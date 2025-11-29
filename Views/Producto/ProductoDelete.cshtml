@@ -1,0 +1,63 @@
+@model Producto
+
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoIndex">Busqueda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoDetail">Catalogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoCreate">Crear</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoEdit">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoDelete">Eliminar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="text-center">
+    <h1 class="display-4">Eliminar productos</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@if(Model == null)
+{
+    <form method="post" asp-action="ProductoDelete">
+    <label class="mb-1">Ingrese un ID para buscar un producto a eliminar:</label>
+    <input type="number" name="idProd" class="form-control m-1" />
+    <button type="submit" class="btn btn-primary p-1 mt-1">Buscar</button>
+    </form>
+}
+else
+{
+    <h2>Desea eliminar este Producto?</h2>
+
+    <form  method="post" asp-action="ProductoDeleteConfirm">
+        
+        <label class="mb-1">ID:</label>
+        <input type="number" name="IdProducto" value="@Model.IdProducto" class="form-control m-1" readonly/>
+        
+        <label>Descripción:</label>
+        <input type="text" name="Descripcion" class="form-control" value="@Model.Descripcion" readonly/>
+
+        <label>Precio:</label>
+        <input type="number" step="0.01" name="Precio" class="form-control" value="@Model.Precio" readonly/>
+        <button type="submit" class="btn btn-danger p-1 mt-1">Eliminar</button>
+    </form>
+    <a class="btn btn-secondary p-1 mt-1" asp-area="" asp-controller="Producto" asp-action="ProductoDelete">Cancelar</a>
+
+}
+
+</div>

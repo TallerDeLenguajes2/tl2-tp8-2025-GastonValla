@@ -1,0 +1,38 @@
+﻿@model List<Producto>
+
+@{
+    ViewData["Title"] = "Catalogo";
+}
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoIndex">Busqueda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoDetail">Catalogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoCreate">Crear</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoEdit">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ProductoDelete">Eliminar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<h1>@ViewData["Title"]</h1>
+
+<p>Listado de todos los productos:.</p>
+
+    <p>@DateTime.Now</p>        <!-- Inserta C# en HTML -->
+    @foreach (var p in Model)   //<!-- C# que genera HTML -->
+    {
+        <p>@p.Descripcion</p>   <!-- HTML con datos del modelo -->
+    }

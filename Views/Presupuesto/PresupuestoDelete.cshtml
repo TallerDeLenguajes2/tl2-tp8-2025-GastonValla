@@ -1,0 +1,63 @@
+@model Presupuesto
+
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoIndex">Busqueda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDetail">Catalogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoCreate">Crear</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoEdit">Editar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDelete">Eliminar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="text-center">
+    <h1 class="display-4">Eliminar presupuestos</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@if(Model == null)
+{
+    <form method="post" asp-action="PresupuestoDelete">
+    <label class="mb-1">Ingrese un ID para buscar un presupuesto a eliminar:</label>
+    <input type="number" name="idPres" class="form-control m-1" />
+    <button type="submit" class="btn btn-primary p-1 mt-1">Buscar</button>
+    </form>
+}
+else
+{
+    <h2>Desea eliminar este Presupuesto?</h2>
+
+    <form  method="post" asp-action="PresupuestoDeleteConfirm">
+        
+        <label class="mb-1">ID:</label>
+        <input type="number" name="IdPresupuesto" value="@Model.IdPresupuesto" class="form-control m-1" readonly/>
+        
+        <label>Nombre:</label>
+        <input type="text" name="NombreDestinatario" class="form-control" value="@Model.NombreDestinatario" readonly/>
+
+        <label>Fecha de creacion:</label>
+        <input type="text" name="FechaCreacion" class="form-control" value="@Model.FechaCreacion" readonly/>
+
+        <button type="submit" class="btn btn-danger p-1 mt-1">Eliminar</button>
+    </form>
+    <a class="btn btn-secondary p-1 mt-1" asp-area="" asp-controller="Presupuesto" asp-action="PresupuestoDelete">Cancelar</a>
+
+}
+
+</div>
