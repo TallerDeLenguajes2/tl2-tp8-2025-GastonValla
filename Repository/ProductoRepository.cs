@@ -88,10 +88,10 @@ namespace MiApi.Data
                 using (SqliteConnection connection = new SqliteConnection(ConnectionString))
                 {
                     connection.Open();
-                    string updateQuery = "UPDATE productos SET IdProducto=@id, Descripcion=@desc, Precio=@precio WHERE IdProducto=@idProducto";
+                    string updateQuery = "UPDATE productos SET Descripcion=@desc, Precio=@precio WHERE IdProducto=@idProducto";
                     using (SqliteCommand updateCmd = new SqliteCommand(updateQuery, connection))
                     {
-                        updateCmd.Parameters.AddWithValue("@id", nuevo.IdProducto);
+                        //updateCmd.Parameters.AddWithValue("@id", nuevo.IdProducto);
                         updateCmd.Parameters.AddWithValue("@desc", nuevo.Descripcion);
                         updateCmd.Parameters.AddWithValue("@precio", nuevo.Precio);
                         if(idProd!=null){updateCmd.Parameters.AddWithValue("@idProducto", idProd);}
@@ -111,11 +111,11 @@ namespace MiApi.Data
                 using (SqliteConnection connection = new SqliteConnection(ConnectionString))
                 {
                     connection.Open();
-                    string selectQuery = "SELECT IdProducto, Descripcion, Precio FROM productos WHERE IdProducto=@idProducto";
+                    string selectQuery = "SELECT IdProducto, Descripcion, Precio FROM productos WHERE IdProducto=@id";
                     using (SqliteCommand selectCmd = new SqliteCommand(selectQuery, connection))
                     {
-                        if(idProd!=null){selectCmd.Parameters.AddWithValue("@idProducto", idProd);}
-                        else{selectCmd.Parameters.AddWithValue("@idProducto", 0);}
+                        if(idProd!=null){selectCmd.Parameters.AddWithValue("@id", idProd);}
+                        else{selectCmd.Parameters.AddWithValue("@id", 0);}
                         using (SqliteDataReader reader = selectCmd.ExecuteReader())
                         {
                             if(reader.Read())
@@ -132,7 +132,37 @@ namespace MiApi.Data
             }
             return retorno;
         }
-        public bool Borrar(int idProd)
+        public List<Producto> BuscarN(string? descripcion)
+        {
+            List<Producto> retorno = new List<Producto>();
+            Producto? prod;
+            lock (_lock)
+            {
+                using (SqliteConnection connection = new SqliteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    string selectQuery = "SELECT IdProducto, Descripcion, Precio FROM productos WHERE Descripcion LIKE @Desc";
+                    using (SqliteCommand selectCmd = new SqliteCommand(selectQuery, connection))
+                    {
+                        if(descripcion!=null){selectCmd.Parameters.AddWithValue("@Desc", '%'+descripcion+'%');}
+                        else{selectCmd.Parameters.AddWithValue("@Desc", 0);}
+                        using (SqliteDataReader reader = selectCmd.ExecuteReader())
+                        {
+                            while(reader.Read())
+                            {
+                                prod = new Producto(reader["IdProducto"] == DBNull.Value? 0 : Convert.ToInt32(reader["IdProducto"]),
+                                                    (string?)reader["Descripcion"],
+                                                    (double)reader["Precio"]);
+                                retorno.Add(prod);
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return retorno;
+        }
+        public bool Borrar(int? idProd)
         {
             int check;
             lock (_lock)
@@ -143,7 +173,8 @@ namespace MiApi.Data
                     string deleteQuery = $"DELETE FROM productos WHERE IdProducto=@id";
                     using (SqliteCommand deleteCmd = new SqliteCommand(deleteQuery, connection))
                     {
-                        deleteCmd.Parameters.AddWithValue("@id",idProd);
+                        if(idProd!=null){deleteCmd.Parameters.AddWithValue("@id",idProd);}
+                        else{deleteCmd.Parameters.AddWithValue("@id",0);}
                         check = deleteCmd.ExecuteNonQuery();
                     }
                     connection.Close();

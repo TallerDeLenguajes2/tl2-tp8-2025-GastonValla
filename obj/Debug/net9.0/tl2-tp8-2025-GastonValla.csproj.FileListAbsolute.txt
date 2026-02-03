@@ -123,3 +123,4 @@ C:\Users\gasto\OneDrive\Desktop\facultad\taller 2\tps\tl2-tp8-2025-GastonValla\b
 C:\Users\gasto\OneDrive\Desktop\facultad\taller 2\tps\tl2-tp8-2025-GastonValla\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\gasto\OneDrive\Desktop\facultad\taller 2\tps\tl2-tp8-2025-GastonValla\obj\Debug\net9.0\tl2-tp8-2025-GastonValla.csproj.AssemblyReference.cache
 C:\Users\gasto\OneDrive\Desktop\facultad\taller 2\tps\tl2-tp8-2025-GastonValla\obj\Debug\net9.0\tl2-tp8-.3E186C19.Up2Date
+C:\Users\gasto\OneDrive\Desktop\facultad\taller 2\tps\tl2-tp8-2025-GastonValla\obj\Debug\net9.0\tl2-tp8-2025-GastonValla.sourcelink.json

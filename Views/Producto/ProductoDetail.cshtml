@@ -29,10 +29,10 @@
 </nav>
 <h1>@ViewData["Title"]</h1>
 
-<p>Listado de todos los productos:.</p>
+<p>Listado de todos los productos:</p>
 
     <p>@DateTime.Now</p>        <!-- Inserta C# en HTML -->
     @foreach (var p in Model)   //<!-- C# que genera HTML -->
     {
-        <p>@p.Descripcion</p>   <!-- HTML con datos del modelo -->
+        <p>@p.Descripcion $@p.Precio</p>   <!-- HTML con datos del modelo -->
     }

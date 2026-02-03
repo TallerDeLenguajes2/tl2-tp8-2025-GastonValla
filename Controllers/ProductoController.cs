@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp8_2025_GastonValla.Models;
 using MiApi.Data;
+using tl2_tp8_2025_GastonValla.Web.ViewModels;
 
 namespace tl2_tp8_2025_GastonValla.Controllers;
 
@@ -23,9 +24,9 @@ public class ProductoController : Controller
     }
     
     [HttpPost]
-    public IActionResult ProductoIndex(int idProd)
+    public IActionResult ProductoIndex(string? desc)
     {
-        Producto? encontrado = productoRepository.Buscar(idProd);
+        List<Producto> encontrado = productoRepository.BuscarN(desc);
         return View(encontrado);
     }
 
@@ -43,10 +44,19 @@ public class ProductoController : Controller
     }
     
     [HttpPost]
-    public IActionResult ProductoCreate(string? Descripcion, double Precio)
+    public IActionResult ProductoCreate(ProductoViewModel prod)
     {
-        bool? retorno = productoRepository.Nuevo(Descripcion, Precio);
-        return View(retorno);
+        if(!ModelState.IsValid)
+        {
+            return View(prod);
+        }
+        Producto p = new Producto{Descripcion = prod.Descripcion, Precio = (double)prod.Precio};
+
+        bool? retorno = productoRepository.Nuevo(p.Descripcion, p.Precio);
+        if(retorno == true)
+        {return RedirectToAction("ProductoIndex");}
+        ModelState.AddModelError("", "No se pudo guardar el producto. Intente nuevamente.");
+        return View(prod);
     }
 
     [HttpGet]
@@ -58,9 +68,20 @@ public class ProductoController : Controller
     [HttpPost]
     public IActionResult ProductoEdit(int? idProd)
     {
-        if(idProd!=null){
+        if(idProd!=null && idProd>0){
             Producto? encontrado = productoRepository.Buscar(idProd);
-            return View(encontrado);
+            if(encontrado!=null)
+            {
+                ProductoViewModel retorno = new ProductoViewModel
+                {
+                    IdProducto = idProd,
+                    Descripcion = encontrado.Descripcion,
+                    Precio = (decimal)encontrado.Precio
+                };
+                return View(retorno);
+            }
+            else
+            {return View(null);}
         }
         else
         {
@@ -69,10 +90,18 @@ public class ProductoController : Controller
     }
 
     [HttpPost]
-    public IActionResult ProductoEditConfirm(Producto producto)
+    public IActionResult ProductoEditConfirm(ProductoViewModel productoModelo)
     {
-
-        bool retorno = productoRepository.Modificar(producto.IdProducto, producto);
+        if(!ModelState.IsValid)
+        {
+            return View("ProductoEdit",productoModelo);
+        }
+        Producto producto = new Producto()
+        {
+            Descripcion = productoModelo.Descripcion,
+            Precio = (double)productoModelo.Precio
+        };
+        bool retorno = productoRepository.Modificar(productoModelo.IdProducto, producto);
         return View(retorno);
     }
 
@@ -96,9 +125,8 @@ public class ProductoController : Controller
     }
 
     [HttpPost]
-    public IActionResult ProductoDeleteConfirm(Producto producto)
+    public IActionResult ProductoDeleteConfirm(ProductoViewModel producto)
     {
-
         bool retorno = productoRepository.Borrar(producto.IdProducto);
         return View(retorno);
     }

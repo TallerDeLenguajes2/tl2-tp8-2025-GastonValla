@@ -1,4 +1,4 @@
-﻿@model Producto
+﻿@model List<Producto>
 
 
 @{
@@ -35,16 +35,34 @@
 @if(Model == null)
 {
     <form method="post" asp-action="ProductoIndex">
-    <label class="mb-1">Ingrese un ID para buscar un producto:</label>
-    <input type="number" name="idProd" class="form-control m-1" />
+    <label class="mb-1">Ingrese una descripcion para buscar un producto:</label>
+    <input type="text" name="desc" class="form-control"/>
     <button type="submit" class="btn btn-primary p-1 mt-1">Buscar</button>
     </form>
 }
 else
 {
-    <p>@Model.IdProducto</p>  
-    <p>@Model.Descripcion</p> 
-    <p>@Model.Precio</p>   
+
+    <form method="post" asp-action="ProductoIndex">
+    <label class="mb-1">Ingrese una descripcion para buscar un producto:</label>
+    <input type="text" name="desc" class="form-control"/>
+    <button type="submit" class="btn btn-primary p-1 mt-1">Buscar</button>
+    </form>
+
+
+    <article class="row">
+    <p class="col-md-4 fw-bold">ID</p>  
+    <p class="col-md-4 fw-bold">Descripcion</p> 
+    <p class="col-md-4 fw-bold">Precio</p>
+    </article>
+    @foreach (Producto  p in Model) 
+    {
+    <article class="row">
+    <p class="col-md-4">@p.IdProducto</p>  
+    <p class="col-md-4">@p.Descripcion</p> 
+    <p class="col-md-4">@p.Precio</p>
+    </article>
+    }
 }
 
 

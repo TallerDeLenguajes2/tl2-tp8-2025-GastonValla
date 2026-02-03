@@ -31,12 +31,21 @@
 
 <p>Listado de todos los presupuestos hechos:.</p>
 
-    <p>@DateTime.Now</p>
+<table>
+    <thead>
+        <th>ID de presupuesto</th>
+        <th>Nombre de destinatario</th>
+        <th>Fecha de creacion</th>
+    </thead>
+    <tbody>
     @foreach (Presupuesto p in Model)  
     {
-        <article class="flex-grow-1">
-        <p>@p.IdPresupuesto</p>
-        <p>@p.NombreDestinatario</p>
-        <p>@p.FechaCreacion</p>
-        </article>
+        <tr>
+        <td>@p.IdPresupuesto</td>
+        <td>@p.NombreDestinatario</td>
+        <td>@p.FechaCreacion</td>
+        <td><a asp-action="PresupuestoEdit" asp-route-IdPres="@p.IdPresupuesto">Editar</a></td>
+        </tr>
     }
+    </tbody>
+</table>

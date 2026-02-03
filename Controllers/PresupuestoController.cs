@@ -2,6 +2,8 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp8_2025_GastonValla.Models;
 using MiApi.Data;
+using tl2_tp8_2025_GastonValla.Web.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace tl2_tp8_2025_GastonValla.Controllers;
 
@@ -17,6 +19,51 @@ public class PresupuestoController : Controller
         _logger = logger;
     }
 
+    private readonly ProductoRepository _productoRepo = new ProductoRepository();
+
+    [HttpGet]
+    public IActionResult AgregarProducto(int id)
+    {
+        // 1. Obtener los productos para el SelectList
+        List<Producto> productos = _productoRepo.GetAll();
+
+        // 2. Crear el ViewModel
+        AgregarProductoViewModel model = new AgregarProductoViewModel
+        {
+        IdPresupuesto = id, // Pasamos el ID del presupuesto actual
+        // 3. Crear el SelectList
+        ListaProductos = new SelectList(productos, "IdProducto", "Descripcion")
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult AgregarProducto(AgregarProductoViewModel model)
+    {
+        {
+            if (!ModelState.IsValid)
+            {
+            var productos = _productoRepo.GetAll();
+            model.ListaProductos = new SelectList(productos, "IdProducto", "Descripcion");
+            // Devolvemos el modelo con los errores y el dropdown recargado
+            return View(model);
+            }
+            // 2. Si es VÁLIDO: Llamamos al repositorio para guardar la relación
+            bool retorno = presupuestoRepository.AgregarProducto(model.IdPresupuesto, model.IdProducto, model.Cantidad);
+
+            // 3. Redirigimos al detalle del presupuesto
+            if(retorno==true){return RedirectToAction(nameof(PresupuestoEdit), new { IdPres = model.IdPresupuesto });}
+            else 
+            {
+            var productos = _productoRepo.GetAll();
+            model.ListaProductos = new SelectList(productos, "IdProducto", "Descripcion");
+            // Devolvemos el modelo con los errores y el dropdown recargado
+            return View(model);
+            }
+        }
+    }
+
+
     [HttpGet]
     public IActionResult PresupuestoIndex()
     {
@@ -30,10 +77,19 @@ public class PresupuestoController : Controller
     }
 
     [HttpGet]
-    public IActionResult PresupuestoDetail()
+    public IActionResult PresupuestoDetail(int? IdPres)
     {
-        List<Presupuesto> retorno = presupuestoRepository.GetAll();
-        return View(retorno);
+        List<Presupuesto> retorno = new List<Presupuesto>();
+        if(IdPres == null)
+        {
+            retorno = presupuestoRepository.GetAll();
+            return View(retorno);
+        }
+        else
+        {
+            retorno.Add(presupuestoRepository.Buscar(IdPres));
+            return View(retorno);
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -56,12 +112,6 @@ public class PresupuestoController : Controller
     }
 
     [HttpGet]
-    public IActionResult PresupuestoEdit()
-    {
-        return View();
-    }
-    
-    [HttpPost]
     public IActionResult PresupuestoEdit(int? idPres)
     {
         if(idPres!=null){
@@ -75,10 +125,10 @@ public class PresupuestoController : Controller
     }
 
     [HttpPost]
-    public IActionResult PresupuestoEditConfirm(int IdPresupuesto, string? NombreDestinatario, string? FechaCreacion)
+    public IActionResult PresupuestoEditConfirm(PresupuestoViewModel pres)
     {
-        Presupuesto presupuesto = new Presupuesto(IdPresupuesto, NombreDestinatario, FechaCreacion);
-        bool retorno = presupuestoRepository.Modificar(IdPresupuesto, presupuesto);
+        Presupuesto presupuesto = new Presupuesto(pres.IdPresupuesto, pres.NombreDestinatario, pres.FechaCreacion);
+        bool retorno = presupuestoRepository.Modificar(pres.IdPresupuesto, presupuesto);
         return View(retorno);
     }
 
@@ -94,7 +144,13 @@ public class PresupuestoController : Controller
     {
         if(idPres!=null){
             Presupuesto? encontrado = presupuestoRepository.Buscar(idPres);
-            return View(encontrado);
+            PresupuestoViewModel retorno = new PresupuestoViewModel
+            {
+                IdPresupuesto = encontrado.IdPresupuesto,
+                NombreDestinatario = encontrado.NombreDestinatario,
+                FechaCreacion = encontrado.FechaCreacion
+            };
+            return View(retorno);
         }
         else
         {
@@ -103,9 +159,9 @@ public class PresupuestoController : Controller
     }
 
     [HttpPost]
-    public IActionResult PresupuestoDeleteConfirm(int IdPresupuesto, string? NombreDestinatario, string? FechaCreacion)
+    public IActionResult PresupuestoDeleteConfirm(PresupuestoViewModel pres)
     {
-        bool retorno = presupuestoRepository.Borrar(IdPresupuesto);
+        bool retorno = presupuestoRepository.Borrar(pres.IdPresupuesto);
         return View(retorno);
     }
 }

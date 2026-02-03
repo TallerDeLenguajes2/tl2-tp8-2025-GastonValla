@@ -1,3 +1,4 @@
+@using tl2_tp8_2025_GastonValla.Web.ViewModels
 @model Presupuesto
 
 @{
@@ -33,7 +34,7 @@
 
 @if(Model == null)
 {
-    <form method="post" asp-action="PresupuestoEdit">
+    <form method="get" asp-action="PresupuestoEdit">
     <label class="mb-1">Ingrese un ID para buscar un presupuesto a editar:</label>
     <input type="number" name="idPres" class="form-control m-1" />
     <button type="submit" class="btn btn-primary p-1 mt-1">Buscar</button>
@@ -44,17 +45,55 @@ else
     <h2>Editar Presupuesto</h2>
 
     <form  method="post" asp-action="PresupuestoEditConfirm">
-        <label class="mb-1">ID:</label>
-        <input type="number" name="idPresupuesto" value="@Model.IdPresupuesto" class="form-control m-1" readonly/>
+        <label asp-for="IdPresupuesto" class="mb-1" hidden>ID:</label>
+        <input asp-for="IdPresupuesto" type="hidden" class="form-control m-1"/>
+        <span asp-validation-for="IdPresupuesto" class="text-danger"></span>
 
-        <label>Nombre de destinatario:</label>
-        <input type="text" name="NombreDestinatario" class="form-control" placeholder="@Model.NombreDestinatario" value="@Model.NombreDestinatario"/>
+        <label asp-for="NombreDestinatario">Nombre de destinatario:</label>
+        <input asp-for="NombreDestinatario" type="text" class="form-control"/>
+        <span asp-validation-for="NombreDestinatario" class="text-danger"></span>
 
-        <label>Fecha de creacion:</label>
-        <input type="text" name="FechaCreacion" class="form-control" placeholder="@Model.FechaCreacion" value="@Model.FechaCreacion" readonly/>
-
+        <label asp-for="FechaCreacion" hidden>Fecha de creacion:</label>
+        <input asp-for="FechaCreacion" type="hidden" class="form-control"/>
+        <span asp-validation-for="FechaCreacion" class="text-danger"></span>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
+
+    <h3>Productos añadidos:</h3>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Descripcion</th>
+            <th>Precio</th>
+        </thead>
+        <tbody>
+        @foreach (PresupuestoDetalle p in Model.Detalle)
+        {
+            <tr>
+                <td>@p.MiProducto.IdProducto</td>
+                <td>@p.MiProducto.Descripcion</td>
+                <td>@p.MiProducto.Precio</td>
+                <td>@p.Cantidad</td>
+            </tr>
+        }
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Monto total: @Model.MontoPresupuesto()</td>
+                <td>Cantidad de productos: @Model.CantidadProductos()</td>
+            </tr>
+        </tfoot>
+    </table>
+
+        <div class="mt-3">
+        <a asp-action="AgregarProducto" asp-route-id="@Model.IdPresupuesto">Agregar productos:</a>
+        </div>
 
 }
 

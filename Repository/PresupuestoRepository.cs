@@ -81,7 +81,31 @@ namespace MiApi.Data
             return filasAfectadas > 0;
         }
 
-
+        /// <summary>
+        /// metodo para aniadir productos a un presupuesto
+        /// </summary>
+        /// <param name="nuevo"></param>
+        public bool AgregarProducto(int? IdPresupuesto, int? IdProducto, int? Cantidad)
+        {
+            int filasAfectadas;
+            lock (_lock)
+            {
+                using (SqliteConnection connection = new SqliteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    string insertQuery = "INSERT INTO presupuestoDetalle (IdPresupuesto, IdProducto, Cantidad) VALUES (@id,@idProd,@cant)";
+                    using (SqliteCommand insertCmd = new SqliteCommand(insertQuery, connection))
+                    {
+                        insertCmd.Parameters.AddWithValue("@id", IdPresupuesto);
+                        insertCmd.Parameters.AddWithValue("@idProd", IdProducto);
+                        insertCmd.Parameters.AddWithValue("@cant", Cantidad);
+                        filasAfectadas = insertCmd.ExecuteNonQuery();
+                    }
+                    connection.Close();
+                }
+            }
+            return filasAfectadas > 0;
+        }
 
         public bool Modificar(int? idPres, Presupuesto nuevo)
         {
@@ -108,26 +132,40 @@ namespace MiApi.Data
         }
         public Presupuesto? Buscar(int? idPres)
         {
-            Presupuesto? retorno;
+            Presupuesto? retorno = null;
             lock (_lock)
             {
                 using (SqliteConnection connection = new SqliteConnection(ConnectionString))
                 {
                     connection.Open();
-                    string selectQuery = "SELECT IdPresupuesto, NombreDestinatario, FechaCreacion FROM presupuestos WHERE IdPresupuesto=@idPresupuesto";
+                    string selectQuery = 
+                    "SELECT IdPresupuesto, NombreDestinatario, FechaCreacion, pd.IdProducto, p.Descripcion, p.Precio, pd.Cantidad FROM presupuestos LEFT JOIN PresupuestoDetalle pd USING (IdPresupuesto) LEFT JOIN Productos p USING (IdProducto) WHERE IdPresupuesto=@idPresupuesto";
+                    bool bandera = false;
                     using (SqliteCommand selectCmd = new SqliteCommand(selectQuery, connection))
                     {
                         if(idPres!=null){selectCmd.Parameters.AddWithValue("@idPresupuesto", idPres);}
                         else{selectCmd.Parameters.AddWithValue("@idPresupuesto", 0);}
                         using (SqliteDataReader reader = selectCmd.ExecuteReader())
                         {
-                            if(reader.Read())
+                            while(reader.Read())
                             {
+                                if(bandera == false){
                                 retorno = new Presupuesto(reader["IdPresupuesto"] == DBNull.Value? 0 : Convert.ToInt32(reader["IdPresupuesto"]),
                                                     (string?)reader["NombreDestinatario"],
                                                     (string?)reader["FechaCreacion"]);
+                                bandera = true;
+                                }
+                                if(bandera==true)
+                                {
+                                    if(reader["Descripcion"]!=DBNull.Value)
+                                    {
+                                    retorno.Detalle.Add(new PresupuestoDetalle(new Producto(reader["IdProducto"] == DBNull.Value? 0 : Convert.ToInt32(reader["IdPresupuesto"]),
+                                                                            (string?)reader["Descripcion"], 
+                                                                            (double)reader["Precio"]),
+                                                                            reader["Cantidad"]== DBNull.Value? 0 : Convert.ToInt32(reader["Cantidad"])));
+                                    }
+                                }
                             }
-                            else{retorno = null;}
                         }
                     }
                     connection.Close();
@@ -135,7 +173,7 @@ namespace MiApi.Data
             }
             return retorno;
         }
-        public bool Borrar(int idPres)
+        public bool Borrar(int? idPres)
         {
             int check;
             lock (_lock)
@@ -146,7 +184,8 @@ namespace MiApi.Data
                     string deleteQuery = $"DELETE FROM presupuestos WHERE IdPresupuesto=@id";
                     using (SqliteCommand deleteCmd = new SqliteCommand(deleteQuery, connection))
                     {
-                        deleteCmd.Parameters.AddWithValue("@id",idPres);
+                        if(idPres!=null){deleteCmd.Parameters.AddWithValue("@id",idPres);}
+                        else{deleteCmd.Parameters.AddWithValue("@id",0);}
                         check = deleteCmd.ExecuteNonQuery();
                     }
                     connection.Close();
